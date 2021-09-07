@@ -21,7 +21,21 @@ public class Kaprekar {
             this.isValid = false;
             System.out.println("Ingresa un numero Kaprekar valido");
             return;
+        }else {
+            String number = Integer.toString(this.number);
+            int coincidencias = 0;
+            for (int i = 0; i < (number.length() - 1); i++) {
+                if (number.charAt(i) == number.charAt(i + 1)) {
+                    coincidencias++;
+                }
+            }
+            if (coincidencias > 2) {
+                this.isValid = false;
+                System.out.println("Ingresa un numero Kaprekar valido");
+                return;
+            }
         }
+
         this.isValid = true;
     }
 
