@@ -24,8 +24,8 @@ public class Kaprekar {
 
     //Determina si el kaprekar es valido
     private void isValidNumber(){
-        //Si no se encuentra entre un rango de 1000 a 9999, indica que no es valido
-        if((this.number / 1000) > 9 || (this.number / 1000) < 1){
+        //Si es mayor a 9999, indica que no es valido
+        if((this.number / 1000) > 9 || this.number == 0){
             this.isValid = false;
             System.out.println("Ingresa un numero Kaprekar valido");
             return;
