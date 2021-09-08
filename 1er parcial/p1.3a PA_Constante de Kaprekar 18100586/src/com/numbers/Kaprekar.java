@@ -24,8 +24,8 @@ public class Kaprekar {
 
     //Determina si el kaprekar es valido
     private void isValidNumber(){
-        //Si es mayor a 9999, indica que no es valido
-        if((this.number / 1000) > 9 || this.number == 0){
+        //Si es mayor a 9999 o menor a 1, indica que no es valido
+        if((this.number / 1000) > 9 || this.number < 1){
             this.isValid = false;
             System.out.println("Ingresa un numero Kaprekar valido");
             return;
@@ -57,6 +57,7 @@ public class Kaprekar {
             int[] digitos = new int[4];
             //Almacena para la primera iteracion el numero ingresado
             int resultNumber = this.number;
+            System.out.print("\nIteracion   NI      NP       NS     Nuevo NI");
 
             //Mientras no se llegue al numero Kaprekar se hace el algoritmo
             while (resultNumber != 6174) {
@@ -89,13 +90,13 @@ public class Kaprekar {
 
                 greatestNumber = Integer.parseInt(Arrays.toString(digitos).replaceAll("\\[|\\]|,|\\s", ""));
 
-                //MOstramos al usuario la informacion
-                System.out.println(iteracion);
-                System.out.println(resultNumber);
-                System.out.println(greatestNumber);
-                System.out.println(lowerNumber);
+                //Mostramos al usuario la informacion
+                System.out.print("\n" + iteracion);
+                System.out.print("          " + resultNumber);
+                System.out.print("     " + greatestNumber);
+                System.out.print("     " + lowerNumber);
                 resultNumber = greatestNumber - lowerNumber;
-                System.out.println(resultNumber);
+                System.out.print("     " + resultNumber);
                 iteracion++;
 
             }
