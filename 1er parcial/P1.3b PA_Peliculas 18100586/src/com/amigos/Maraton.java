@@ -1,7 +1,9 @@
 package com.amigos;
 
+import java.lang.reflect.Array;
 import java.text.Format;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -16,10 +18,9 @@ public class Maraton {
     private List<Pelicula> peliculas;
     /***
      * Se utiliza para almacenar las posibles sumas de periodos de tiempo de la lista de peliculas
-     * Relaciona dicha posible suma con la lista de Peliculas que regresa dicha suma, se indica que se ordena
-     * de mayor a menor rango de tiempo
+     * Relaciona dicha posible suma con la lista de Peliculas que regresa dicha suma.
      */
-    TreeMap <Duration,List<Pelicula>>contenedor = new TreeMap<>(Collections.reverseOrder());
+    ArrayList<PosiblesPeliculas> posiblesPeliculas = new ArrayList<PosiblesPeliculas>();
 
     public Maraton(Duration duracion, List<Pelicula> peliculas) {
         this.duracion = duracion;
@@ -49,6 +50,10 @@ public class Maraton {
 
     public void organizate(){
         this.sum(0, Duration.ZERO, new ArrayList<Pelicula>() );
+        //Ordenamos el arreglo por las duraciones de pelicula (De menor a mayor)
+        posiblesPeliculas.sort(Comparator.comparing(PosiblesPeliculas::getDuracionPosiblesPeliculas));
+        //Se utiliza para iterar desde la mayor duracion en las combinaciones posibles
+        int posicion = posiblesPeliculas.size()-1;
         /***
          * Mientras la resta entre el tiempo de maratonn y la mayor suma de las sumas posibles de
          * negativo, quiere decir que la mayor suma posibles es mayor que la duracion del maraton,
@@ -56,10 +61,23 @@ public class Maraton {
          * si alguna combinacion es menor que al tiempo mayor quiere decir que es la mejor opcion
          * ya que se ordena de mayor a menor
          */
-        while (this.duracion.minus(contenedor.firstKey().abs()).isNegative()){
-            contenedor.remove(contenedor.firstKey());
+        while (this.duracion.minus(posiblesPeliculas.get(posicion).getDuracionPosiblesPeliculas().abs()).isNegative()){
+            posiblesPeliculas.remove(posicion);
+            posicion--;
         }
-        printListMovies((ArrayList<Pelicula>) contenedor.get(contenedor.firstKey()));
+        /**
+         * Una vez que se elimminan las combinaciones que por su duracion no pueden ser sugeridas se verifica si la duracion mayor
+         * es igual a la anterior, mientras la resta entre la ultima y la penultima den 0 quieren decir que son iguales, se imprime el mayor
+         * y se elimina de la lista por que ya fue sugerido y vuelve a preguntar si hay otro igual
+         */
+        int numeroDeSugerencia = 1;
+        while (posiblesPeliculas.get(posiblesPeliculas.size()-1).getDuracionPosiblesPeliculas().minus(posiblesPeliculas.get(posiblesPeliculas.size()-2).getDuracionPosiblesPeliculas().abs()).isZero()){
+            printListMovies(posiblesPeliculas.get(posiblesPeliculas.size()-1).getPosiblesPeliculas(),numeroDeSugerencia);
+            posiblesPeliculas.remove(posiblesPeliculas.size()-1);
+            numeroDeSugerencia++;
+        }
+        //Si ya no hay ninguna iguall imprimimos la sugerencia
+        printListMovies(posiblesPeliculas.get(posiblesPeliculas.size()-1).getPosiblesPeliculas(),numeroDeSugerencia);
     }
 
     /***
@@ -78,7 +96,7 @@ public class Maraton {
          */
         if(l > (this.peliculas.size()-1)){
             ArrayList<Pelicula> posiblesPeliculas = new ArrayList<Pelicula>(peliculas);
-            this.contenedor.put(count,posiblesPeliculas);
+            this.posiblesPeliculas.add(new PosiblesPeliculas(count,posiblesPeliculas));
             return;
         }
         /***
@@ -105,8 +123,8 @@ public class Maraton {
      * Imprime la lista de peliculas de salda
      * @param peliculasParaVer lista peliculas que han sido elegidas como la mejor opcion para ver en el maraton
      */
-    private void printListMovies(ArrayList<Pelicula> peliculasParaVer){
-        System.out.println("\nSalida: ");
+    private void printListMovies(List<Pelicula> peliculasParaVer, int sugerencia){
+        System.out.println("\nSugerencia " + sugerencia + " : ");
         for (Pelicula pelicula :
                 peliculasParaVer) {
             System.out.println(pelicula.getNombre() + " " + formatDuration(pelicula.getDuracion()));
