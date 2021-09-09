@@ -1,13 +1,6 @@
 package com.amigos;
 
-import javax.sound.midi.Soundbank;
-import java.lang.reflect.Array;
-import java.sql.SQLOutput;
 import java.time.Duration;
-import java.time.LocalTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAmount;
 import java.util.*;
 
 public class Maraton {
@@ -15,7 +8,7 @@ public class Maraton {
     private int numeroDePeliculas;
     private List<Pelicula> peliculas;
     private List<Duration> posiblesSumas;
-    TreeMap <Duration,List<Pelicula>>contenedor = new TreeMap<Duration,List<Pelicula>>();
+    TreeMap <Duration,List<Pelicula>>contenedor = new TreeMap<>(Collections.reverseOrder());
 
     public Maraton(Duration duracion, List<Pelicula> peliculas) {
         this.duracion = duracion;
@@ -45,14 +38,10 @@ public class Maraton {
 
     public void organizate(){
         this.sum(0, Duration.ZERO, new ArrayList<Pelicula>() );
-        Set set = this.contenedor.entrySet();
-        Iterator i = set.iterator();
-        // Display elements
-        while(i.hasNext()) {
-            Map.Entry me = (Map.Entry)i.next();
-            System.out.print(me.getKey() + ": ");
-            System.out.println(me.getValue().toString());
+        while (this.duracion.minus(contenedor.firstKey().abs()).isNegative()){
+            contenedor.remove(contenedor.firstKey());
         }
+        printListMovies((ArrayList<Pelicula>) contenedor.get(contenedor.firstKey()));
     }
 
     public void sum(int l, Duration count, ArrayList<Pelicula> peliculas) {
