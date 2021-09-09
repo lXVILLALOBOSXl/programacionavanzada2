@@ -4,6 +4,7 @@ import com.amigos.Maraton;
 import com.amigos.Pelicula;
 
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,17 +18,23 @@ public class Test {
         maraton.organizate();
     }
 
-    public static LocalTime getDuracionMaraton() {
+    public static Duration getDuracionMaraton() {
         Scanner scanner = new Scanner(System.in);
-        LocalTime duracion = LocalTime.now();
+        Duration duracion = Duration.ZERO;
+        boolean error = false;
 
-        try {
-            System.out.print("Ingrese el TIEMPO (HH:mm) del Maraton: ");
-            duracion = LocalTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("H:mm"));
-        } catch (Exception ex) {
-            System.out.println("ingrese un formato correcto: HH:mm");
-            getDuracionMaraton();
-        }
+        do {
+            try {
+                scanner = new Scanner(System.in);
+                System.out.print("Ingrese el TIEMPO (HH:mm) del Maraton: ");
+                duracion = Duration.between(LocalTime.MIN, LocalTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("H:mm")));
+                error = false;
+            } catch (Exception ex) {
+                System.out.println("ingrese un formato correcto: HH:mm");
+                error = true;
+            }
+        }while (error);
+
 
         return duracion;
     }
@@ -40,7 +47,7 @@ public class Test {
             Pelicula pelicula = new Pelicula();
             try {
                 System.out.print("\nIngrese el TIEMPO (HH:mm) de la pelicula " + (i + 1) + " : ");
-                pelicula.setDuracion(LocalTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("H:mm")));
+                pelicula.setDuracion(Duration.between(LocalTime.MIN, LocalTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("H:mm"))));
                 System.out.print("Ingrese el NOMBRE de la pelicula " + (i + 1) + " : ");
                 pelicula.setNombre(scanner.nextLine());
                 peliculas.add(pelicula);
@@ -64,8 +71,11 @@ public class Test {
                 System.out.print("Ingresa el NUMERO de peliculas: ");
                 numeroDePeliculas = scanner.nextInt();
                 error = false;
+                if (numeroDePeliculas < 1){
+                    throw new Exception();
+                }
             } catch (Exception ex) {
-                System.out.println("ingresa un numero correcto de peliculas");
+                System.out.println("ingresa un numero positivo correcto de peliculas");
                 error = true;
             }
         }while (error);

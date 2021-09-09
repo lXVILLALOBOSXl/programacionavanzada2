@@ -1,20 +1,19 @@
 package com.amigos;
 
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalTime;
 
 public class Pelicula {
     private String nombre;
-    private LocalTime duracion;
+    private Duration duracion;
 
-    public Pelicula() {
-
-    }
-
-    public Pelicula(String nombre, LocalTime duracion) {
+    public Pelicula(String nombre, Duration duracion) {
         this.nombre = nombre;
         this.duracion = duracion;
     }
+
+    public Pelicula() { }
 
     public String getNombre() {
         return nombre;
@@ -24,11 +23,11 @@ public class Pelicula {
         this.nombre = nombre;
     }
 
-    public LocalTime getDuracion() {
+    public Duration getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(LocalTime duracion) {
+    public void setDuracion(Duration duracion) {
         this.duracion = duracion;
     }
 
