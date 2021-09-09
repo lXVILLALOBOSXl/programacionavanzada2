@@ -106,7 +106,7 @@ public class Maraton {
      * @param peliculasParaVer lista peliculas que han sido elegidas como la mejor opcion para ver en el maraton
      */
     private void printListMovies(ArrayList<Pelicula> peliculasParaVer){
-        System.out.println();
+        System.out.println("\nSalida: ");
         for (Pelicula pelicula :
                 peliculasParaVer) {
             System.out.println(pelicula.getNombre() + " " + formatDuration(pelicula.getDuracion()));
