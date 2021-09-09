@@ -6,8 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class NumbersText {
+    //Almacena cadena de texto ingresada por usuario
     private String numberAsString;
+    //Almacena cadena de texto ingresada por usuario dividida en palabras
     private List<String> words;
+    /**
+     * ALmacena el nombre del numero como llave y su equivalente en tipo
+     * entero (Son todas las posibles variaciones que existen en el lenguaje español)
+     * 16 no puede ser dies y seis, tiene que ser dieciceis y es una variante mas
+     * 31 no es variante por que se puede formar de treinta y uno
+     */
     private static final HashMap<String,Integer> NUMBERS_TEXT_LIST = new HashMap<String, Integer>(){{
         put("cero",0);
         put("uno",1);
@@ -56,22 +64,39 @@ public class NumbersText {
         put("novecientos",900);
     }};
 
+    /***
+     * Inicializa la propiedad numberAsString con la cadena ingresada
+     * Divide por palabras la frase ingresada por el usuario y lo guarda en su propiedad
+     * Words
+     * @param numberAsString Recibe la cadena de texto de operacion ingresada por el usuario
+     */
     public NumbersText(String numberAsString) {
         this.numberAsString = numberAsString;
         this.words = new ArrayList<String>(Arrays.asList(numberAsString.split(" ")));
     }
 
+    /***
+     * Dada una cadena de texto lo interpreta y convierte a entero
+     * @param parte es el numero que esta antes o despues del operador
+     * @param index es donde se quedo recorrienddo el arreglo de palabras donde se busca el operador
+     * @return el numero entero de la parte en que se encuentra
+     */
     private int toInt(int parte, int index){
         int suma = 0;
+        //Almacena por unidades, decenas y centenas las distintas partes de la operacion
         List<Integer> resultado = new ArrayList<>();
         if (parte == 1) {
+            //La parte es la primera por lo que tiene que recorrer de la posicion donde encontro el operador hacia atras
             for (int i = (index - 1); i > -1; i--) {
+                //Si enceuntra la palabra dentro del arreglo de palabras
                 if (NUMBERS_TEXT_LIST.containsKey(this.words.get(i))) {
+                    //Lo agrega al arreglo donde se almacenan las partes enteras
                     resultado.add(NUMBERS_TEXT_LIST.get(this.words.get(i)));
                     continue;
                 }
             }
         }else {
+            //La parte es la primera por lo que tiene que recorrer de la posicion donde encontro el operador hacia el final
             for (int i = (index + 1); i < this.words.size(); i++) {
                 if (NUMBERS_TEXT_LIST.containsKey(this.words.get(i))) {
                     resultado.add(NUMBERS_TEXT_LIST.get(this.words.get(i)));
@@ -79,12 +104,19 @@ public class NumbersText {
                 }
             }
         }
+        //termina de convertir las partes a numeros enteros
         for (Integer numero : resultado) {
+            //realizamos la suma de centenas decenas unidades
             suma += numero;
         }
         return suma;
     }
 
+    /***
+     * Se encarcarga de recorrer el arreglo de palabras y si encuentra un operador
+     * manda a realizar la operacion correspondiente
+     * @return Resultado de la operacion
+     */
     public int resultado(){
         for (int i = 0; i < this.words.size(); i++) {
             switch (this.words.get(i)){
