@@ -34,6 +34,7 @@ public class NumbersText {
         put("catorce",14);
         put("quince",15);
         put("dieciseis",16);
+        put("diecisiete",17);
         put("dieciocho",18);
         put("diecinueve",19);
         put("veinte",20);
