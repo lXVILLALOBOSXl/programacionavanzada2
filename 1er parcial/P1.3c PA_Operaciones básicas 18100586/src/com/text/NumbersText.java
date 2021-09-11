@@ -148,25 +148,30 @@ public class NumbersText {
      */
     public void resultado(){
         int encontrados = 0;
+        int resultado;
         for (int i = 0; i < this.words.size(); i++) {
             switch (this.words.get(i)){
                 case "mas":
                     encontrados++;
-                    System.out.println(resultInText(this.toInt(1,i) + this.toInt(2,i)));
+                    resultado = this.toInt(1,i) + this.toInt(2,i);
+                    System.out.println(resultado == 0 ? "cero" : resultInText(resultado));
                     break;
                 case "menos":
                     encontrados++;
-                    System.out.println(resultInText(this.toInt(1,i) - this.toInt(2,i)));
+                    resultado = this.toInt(1,i) - this.toInt(2,i);
+                    System.out.println(resultado == 0 ? "cero" : resultInText(resultado));
                     break;
                 case "por":
                     encontrados++;
-                    System.out.println(resultInText(this.toInt(1,i) * this.toInt(2,i)));
+                    resultado = this.toInt(1,i) * this.toInt(2,i);
+                    System.out.println(resultado == 0 ? "cero" : resultInText(resultado));
                     break;
                 case "entre":
                     encontrados++;
                     //Intenta hacer la division por si el denominador es 0
                     try {
-                        System.out.println(resultInText(this.toInt(1,i) / this.toInt(2,i)));
+                        resultado = this.toInt(1,i) / this.toInt(2,i);
+                        System.out.println(resultado == 0 ? "cero" : resultInText(resultado));
                     }catch (Exception ex){
                         //Si el denominador fue 0, el resultado es infinito
                         System.out.println("Infinito");
