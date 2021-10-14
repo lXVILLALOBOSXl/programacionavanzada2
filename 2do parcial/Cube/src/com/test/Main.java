@@ -7,4 +7,5 @@ public class Main {
         GUI vista = new GUI();
         vista.setVisible(true);
     }
+
 }
