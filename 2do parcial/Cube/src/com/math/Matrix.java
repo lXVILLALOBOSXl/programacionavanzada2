@@ -2,7 +2,12 @@ package com.math;
 
 import java.util.ArrayList;
 
+/***
+ * Realiza todos los calculos de matrices y regresa los puntos necesarios
+ * para realizar las lineas
+ */
 public class Matrix {
+    //Almacena las matrices (ZOOM, TRASLATION, X, Y, Z, ROTATION (X,Y,Z)) que son necesarias para tener la matriz de efectos
     private static ArrayList<Double[][]> matricesEfecto = new ArrayList<>();
     private static ArrayList<Double[][]> matricesCubo = new ArrayList<>();
     private static Double [][] ZOOM;
@@ -11,6 +16,7 @@ public class Matrix {
     private static Double [][] Y;
     private static Double [][] Z;
     private static Double [][] EFFECTS = new Double[4][4];
+    //por cuestiones de estatica lo iniciamos en esos valores para centrar el cubo cuando cargue por primera vez
     public static Double X_TRASLATION = 500d;
     public static Double Y_TRASLATION = 400d;
     public static Double Z_TRASLATION = 0d;
@@ -20,10 +26,15 @@ public class Matrix {
     public static Double X_ROTATION = Math.toRadians(0);
     public static Double Y_ROTATION = Math.toRadians(0);
     public static Double Z_ROTATION = Math.toRadians(0);
+    //Por estetica, me agrado que el cubo estuviera a 45º
     private static final Double Z_ANGLE = Math.toRadians(45);
+    //Almacena el seno y el coseno del angulo del cubo
     private static final Double COS_Z_ANGLE = (Math.cos(Z_ANGLE));
     private static final Double SIN_Z_ANGLE = (Math.sin(Z_ANGLE));
 
+    /***
+     * Inicializa y crea las matrices del cubo y de los efectos
+     */
     public static void setMatrix(){
             fillMatrixEffects();
             createMainMatrix();
@@ -32,6 +43,9 @@ public class Matrix {
     }
 
 
+    /***
+     * LLena las matrices de los efectos
+     */
     private static void fillMatrixEffects(){
         ZOOM = new Double[][]{
                 {X_ZOOM, 0d, 0d, 0d},
@@ -65,6 +79,9 @@ public class Matrix {
         };
     }
 
+    /**
+     * Crea el arreglo de matrices de efectos
+     */
     private static void createMainMatrix(){
         matricesEfecto.clear();
         matricesEfecto.add(new Double[][]{
@@ -80,6 +97,9 @@ public class Matrix {
         matricesEfecto.add(Z);
     }
 
+    /**
+     * Obtinene la matriz resultante de efectos
+     */
     private static void getEffectMatrix(){
         Double[][] resultado = matricesEfecto.get(0);
         for (int i = 0; i < matricesEfecto.size()-1; i++){
@@ -88,15 +108,28 @@ public class Matrix {
         EFFECTS = resultado;
     }
 
+    /***
+     * Realiza las operaciones necesarias para sacar los puntos X y Y con los que
+     * se trazan las rectas
+     * @return Arreglo con puntos x,y
+     */
     public static ArrayList<Double> getPoints(){
+        //En caso de que se modifique el valor cuando presionemos un boton, es necesario
+        //volver a modificar todas las matrices
         setMatrix();
+        //Almacena los puntos para graficar las rectas
         ArrayList<Double> points = new ArrayList<>();
+        //Guarda el resultado de las mutiplicaciones de matrices
         Double[][] resultado =  multiply(EFFECTS , matricesCubo.get(0));
+        //agregamos los puntos de la matriz de inicio
         points.add(matricesCubo.get(0)[0][3]-matricesCubo.get(0)[2][3]*COS_Z_ANGLE);
         points.add(matricesCubo.get(0)[1][3]-matricesCubo.get(0)[2][3]*SIN_Z_ANGLE);
 
+        //Agregamos los puntos de las matrices restantes
         for (int i = 0; i < matricesCubo.size()-1; i++){
+            //Se va a ir guardando la multiplicacion, del resultado anterior por el siguiente
             resultado =  multiply(resultado, matricesCubo.get(i+1));
+            //Se guardan los puntos X,Y del resultado
             points.add(resultado[0][3]-resultado[2][3]*COS_Z_ANGLE);
             points.add(resultado[1][3]-resultado[2][3]*SIN_Z_ANGLE);
         }
@@ -104,6 +137,9 @@ public class Matrix {
         return points;
     }
 
+    /**
+     * Crea y almacena un arreglo de matrices que son la serie de pasos para formar el cubo
+     */
     private static void fillMatrixCube(){
         matricesCubo.clear();
         matricesCubo.add(
@@ -321,6 +357,12 @@ public class Matrix {
                 });
     }
 
+    /**
+     * Multiplica matrices de 4 x 4
+     * @param matrixA
+     * @param matrixB
+     * @return Resultado de la matriz a por la matriz b
+     */
     private static Double[][] multiply(Double[][] matrixA, Double[][] matrixB){
         Double[][] resultado = new Double[4][4];
         int columnasResultado = 0;

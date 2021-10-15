@@ -9,21 +9,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/***
+ * Gestiona (controlador y vista) la interfaz del programa
+ */
 public class GUI extends JFrame {
 
     private JButton zoomPlus, zoomMinus, xRotationP, yRotationP, zRotationP, xRotationM, yRotationM, zRotationM, xTraslationP, yTraslationP, zTraslationP, xTraslationM, yTraslationM, zTraslationM;
 
+    /**
+     * Inicializa el layout
+     */
     public GUI(){
         super();
         inicializa();
     }
 
+    /***
+     * Crea la vista de la interfaz grafica, agrego los eventos a los componentes de la misma y se configuran las
+     * propiedades del layout
+     */
     protected void inicializa(){
+        //Establecer propiedades de la ventana
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setPreferredSize(new Dimension(1000,5000));
         this.setTitle("18100586");
         this.setLocationRelativeTo(null);
 
+        //Definir elementos del layout
         zoomPlus = new JButton("+");
         zoomMinus = new JButton("-");
         xRotationP = new JButton("X+º");
@@ -40,6 +52,7 @@ public class GUI extends JFrame {
         zTraslationM = new JButton("Z+");
 
 
+        //Acomodo de los elementos del layout
         GroupLayout groupLayout;
         groupLayout = new GroupLayout(this.getContentPane());
 
@@ -94,8 +107,10 @@ public class GUI extends JFrame {
                         )
         );
 
+        //Se hacen los calculos para el cubo inicial
         Matrix.setMatrix();
 
+        //Se agregan los evenetos a los componentes del programa
         zoomPlus.addActionListener((ActionEvent) -> {onClickZoomPlus();});
 
         zoomMinus.addActionListener((ActionEvent) -> {onClickZoomMinus();});
@@ -130,6 +145,10 @@ public class GUI extends JFrame {
     }
 
 
+    /***
+     * Se aumenta o disminuye la variable relacionada al funcionamiento
+     * dependiendo en que boton se haga click y el cubo se pinta de nuevo
+     */
 
     private void onClickZMTraslation() {
         Matrix.Z_TRASLATION -= 10;
@@ -192,6 +211,7 @@ public class GUI extends JFrame {
     }
 
     private void onClickZoomMinus() {
+        //El valor del zoom no puede ser menor a 0, lo dejo en 0.2 para que no dezaparesca en 0.1
         if(Matrix.X_ZOOM > 0.2) {
             Matrix.X_ZOOM -= 0.1;
             Matrix.Y_ZOOM -= 0.1;
@@ -207,12 +227,20 @@ public class GUI extends JFrame {
         this.repaint();
     }
 
+    /***
+     * Pinta en el layout el cubo y cada que hay un evento que modifique el cubo
+     * se tiene que volver a pintar
+     * @param g
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
 
+        //Recibimos los puntos para trazar las lineas
         ArrayList<Double> points = Matrix.getPoints();
 
+        //Pintamos las lineas necesarias para el cubo, a excepcion de la primera que inicia en el 0,0.
+        //Por eso se inicia en 4
         for (int i = 4; i < points.size(); i+=4) {
             g.drawLine(points.get(i).intValue(), points.get(i+1).intValue(), points.get(i+2).intValue(), points.get(i+3).intValue());
         }
