@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class GUI extends JFrame {
 
-    private JButton zoomPlus, zoomMinus, xRotation, yRotation, zRotation, xTraslationP, yTraslationP, zTraslationP, xTraslationM, yTraslationM, zTraslationM;
+    private JButton zoomPlus, zoomMinus, xRotationP, yRotationP, zRotationP, xRotationM, yRotationM, zRotationM, xTraslationP, yTraslationP, zTraslationP, xTraslationM, yTraslationM, zTraslationM;
 
     public GUI(){
         super();
@@ -26,9 +26,12 @@ public class GUI extends JFrame {
 
         zoomPlus = new JButton("+");
         zoomMinus = new JButton("-");
-        xRotation = new JButton("Xº");
-        yRotation = new JButton("Yº");
-        zRotation = new JButton("Zº");
+        xRotationP = new JButton("X+º");
+        yRotationP = new JButton("Y+º");
+        zRotationP = new JButton("Z+º");
+        xRotationM = new JButton("X-º");
+        yRotationM = new JButton("Y-º");
+        zRotationM = new JButton("Z-º");
         xTraslationP = new JButton("X+");
         yTraslationP = new JButton("Y-");
         zTraslationP = new JButton("Z-");
@@ -51,9 +54,12 @@ public class GUI extends JFrame {
                                     groupLayout.createSequentialGroup()
                                         .addComponent(zoomPlus,10,80,233)
                                         .addComponent(zoomMinus,10,80,233)
-                                        .addComponent(xRotation,10,80,233)
-                                        .addComponent(yRotation,10,80,233)
-                                        .addComponent(zRotation,10,80,233)
+                                        .addComponent(xRotationP,10,80,233)
+                                        .addComponent(yRotationP,10,80,233)
+                                        .addComponent(zRotationP,10,80,233)
+                                            .addComponent(xRotationM,10,80,233)
+                                            .addComponent(yRotationM,10,80,233)
+                                            .addComponent(zRotationM,10,80,233)
                                         .addComponent(xTraslationM,10,80,233)
                                         .addComponent(yTraslationP,10,80,233)
                                         .addComponent(zTraslationP,10,80,233)
@@ -72,9 +78,12 @@ public class GUI extends JFrame {
                                                 groupLayout.createParallelGroup()
                                                         .addComponent(zoomPlus)
                                                         .addComponent(zoomMinus)
-                                                        .addComponent(xRotation)
-                                                        .addComponent(yRotation)
-                                                        .addComponent(zRotation)
+                                                        .addComponent(xRotationP)
+                                                        .addComponent(yRotationP)
+                                                        .addComponent(zRotationP)
+                                                        .addComponent(xRotationM)
+                                                        .addComponent(yRotationM)
+                                                        .addComponent(zRotationM)
                                                         .addComponent(xTraslationM)
                                                         .addComponent(yTraslationP)
                                                         .addComponent(zTraslationP)
@@ -91,11 +100,17 @@ public class GUI extends JFrame {
 
         zoomMinus.addActionListener((ActionEvent) -> {onClickZoomMinus();});
 
-        xRotation.addActionListener((ActionEvent) -> {onClickXRotation();});
+        xRotationP.addActionListener((ActionEvent) -> {onClickXRotationP();});
 
-        yRotation.addActionListener((ActionEvent) -> {onClickYRotation();});
+        yRotationP.addActionListener((ActionEvent) -> {onClickYRotationP();});
 
-        zRotation.addActionListener((ActionEvent) -> {onClickZRotation();});
+        zRotationP.addActionListener((ActionEvent) -> {onClickZRotationP();});
+
+        xRotationM.addActionListener((ActionEvent) -> {onClickXRotationM();});
+
+        yRotationM.addActionListener((ActionEvent) -> {onClickYRotationM();});
+
+        zRotationM.addActionListener((ActionEvent) -> {onClickZRotationM();});
 
         xTraslationP.addActionListener((ActionEvent) -> {onClickXPTraslation();});
 
@@ -146,25 +161,42 @@ public class GUI extends JFrame {
         this.repaint();
     }
 
-    private void onClickZRotation() {
+    private void onClickZRotationP() {
         Matrix.Z_ROTATION += 0.1;
         this.repaint();
     }
 
-    private void onClickYRotation() {
+    private void onClickYRotationP() {
         Matrix.Y_ROTATION += 0.1;
         this.repaint();
     }
 
-    private void onClickXRotation() {
+    private void onClickXRotationP() {
         Matrix.X_ROTATION += 0.1;
         this.repaint();
     }
 
+    private void onClickZRotationM() {
+        Matrix.Z_ROTATION -= 0.1;
+        this.repaint();
+    }
+
+    private void onClickYRotationM() {
+        Matrix.Y_ROTATION -= 0.1;
+        this.repaint();
+    }
+
+    private void onClickXRotationM() {
+        Matrix.X_ROTATION -= 0.1;
+        this.repaint();
+    }
+
     private void onClickZoomMinus() {
-        Matrix.X_ZOOM -= 0.1;
-        Matrix.Y_ZOOM -= 0.1;
-        Matrix.Z_ZOOM -= 0.1;
+        if(Matrix.X_ZOOM > 0.2) {
+            Matrix.X_ZOOM -= 0.1;
+            Matrix.Y_ZOOM -= 0.1;
+            Matrix.Z_ZOOM -= 0.1;
+        }
         this.repaint();
     }
 
