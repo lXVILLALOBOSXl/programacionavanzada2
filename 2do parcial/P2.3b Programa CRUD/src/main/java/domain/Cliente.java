@@ -1,5 +1,8 @@
 package domain;
 
+/***
+ * Representa como objeto las propiedades de un registro en la BD
+ */
 public class Cliente {
     private Integer idCliente;
     private String nombre;

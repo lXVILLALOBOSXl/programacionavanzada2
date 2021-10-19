@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.Date;
 
+/***
+ * Representa como objeto las propiedades de un registro en la BD
+ */
 public class Auto {
     private Integer idAuto;
     private String modelo;

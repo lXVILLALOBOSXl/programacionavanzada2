@@ -2,6 +2,9 @@ package util;
 
 import java.sql.*;
 
+/***
+ * Se encarga de administrar todo lo relacionado con la conexion a la bd
+ */
 public class Conexion {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/concesionario?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String JDBC_USER = "root";

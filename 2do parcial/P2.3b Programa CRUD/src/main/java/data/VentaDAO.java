@@ -12,7 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/***
+ * Se encarga de realizar las transacciones CRUD para los objetos venta
+ */
 public class VentaDAO {
     private Connection conexionTransaccional;
     private static final String SQL_SELECT = "SELECT Venta.idVenta, Auto.modelo, Auto.marca, Auto.ano, Auto.precio, Cliente.nombre FROM Venta INNER JOIN Auto on Venta.idAuto = Auto.idAuto INNER JOIN Cliente ON Venta.idCliente = Cliente.idCliente;";
@@ -28,6 +30,11 @@ public class VentaDAO {
         this.conexionTransaccional = conexionTransaccional;
     }
 
+    /***
+     * Se encarga de traer todos los registros de Ventas en la BD
+     * @return Lista de objetos ventas, derivada del select
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public List<Venta> seleccionar() throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -66,6 +73,12 @@ public class VentaDAO {
         return ventas;
     }
 
+    /***
+     * Se encarga de insertar un nuevo registro venta a la bd
+     * @param venta Objeto que contiene la infromacion del registro a insertar
+     * @return NUmero de rows afectadas
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public int insertar(Venta venta) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -89,6 +102,12 @@ public class VentaDAO {
         return registros;
     }
 
+    /***
+     * Se encarga de actualizar un registro venta existente en la bd
+     * @param venta Objeto que contiene la infromacion del registro a modificar
+     * @return NUmero de rows afectadas
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public int actualizar(Venta venta) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -113,6 +132,12 @@ public class VentaDAO {
         return registros;
     }
 
+    /***
+     * Se encarga de eliminar un registro venta existente en la bd
+     * @param venta Objeto que contiene la infromacion del registro a eliminar
+     * @return NUmero de rows afectadas
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public int eliminar(Venta venta) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;

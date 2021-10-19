@@ -38,6 +38,7 @@ public class GUI extends JFrame {
     private DefaultTableModel tablaAutoModel = new DefaultTableModel();
     private DefaultTableModel tablaClienteModel = new DefaultTableModel();
     private DefaultTableModel tablaVentaModel = new DefaultTableModel();
+    //Guardan el identificador del elemento seleccionado dependiendo la tabla
     private Integer ventaSeleccionada, autoSeleccionado, clienteSeleccionado;
 
 
@@ -100,6 +101,7 @@ public class GUI extends JFrame {
         comboBoxClientes = new JComboBox();
         comboBoxAutos = new JComboBox();
 
+        //Crea las tablas
         setTables();
 
         //Acomodo de los elementos del layout
@@ -157,8 +159,10 @@ public class GUI extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 if (tablaAuto.getSelectedRow() > -1) {
-                    // print first column value from selected row
+                    // Hay una fila seleccionada en la tabla
+                    // Almacenamos el identificador del elemento al que se hizo click
                     autoSeleccionado = Integer.parseInt(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 0).toString());
+                    // Ponemos la informacion del elemnto seleccionado en las textbox correpondientes
                     modelo.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 1).toString());
                     marca.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 2).toString());
                     ano.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 3).toString());
@@ -171,8 +175,10 @@ public class GUI extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 if (tablaCliente.getSelectedRow() > -1) {
-                    // print first column value from selected row
+                    // Hay una fila seleccionada en la tabla
+                    // Almacenamos el identificador del elemento al que se hizo click
                     clienteSeleccionado = Integer.parseInt(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 0).toString());
+                    // Ponemos la informacion del elemnto seleccionado en las textbox correpondientes
                     nombre.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 1).toString());
                     apellidoPaterno.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 2).toString());
                     apellidoMaterno.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 3).toString());
@@ -186,7 +192,8 @@ public class GUI extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 if (tablaVenta.getSelectedRow() > -1) {
-                    // print first column value from selected row
+                    // Hay una fila seleccionada en la tabla
+                    // Almacenamos el identificador del elemento al que se hizo click
                     ventaSeleccionada = Integer.parseInt(tablaVenta.getValueAt(tablaVenta.getSelectedRow(), 0).toString());
                 }
             }
@@ -328,10 +335,9 @@ public class GUI extends JFrame {
 
     }
 
-    private void putAuto() {
-        System.out.println("auto");
-    }
-
+    /***
+     * Configura, carga y pide la informacion para las tablas
+     */
     private void setTables() {
         tablaAutoModel.addColumn("id");
         tablaAutoModel.addColumn("Modelo");
@@ -380,6 +386,10 @@ public class GUI extends JFrame {
 
     }
 
+    /***
+     * Elimina la venta seleccionada de la bd
+     * @throws SQLException si hubo algun error con la bd
+     */
     private void deleteVenta() throws SQLException {
         if(ventaSeleccionada == null){
             return;
@@ -396,6 +406,10 @@ public class GUI extends JFrame {
         setVentas();
     }
 
+    /***
+     * Registra en la bd una venta a partir de la informacion ingresada
+     * @throws SQLException si hubo algun error con la bd
+     */
     private void createVenta() throws SQLException {
         if(comboBoxAutos.getSelectedItem().equals(null) || comboBoxClientes.getSelectedItem().equals(null) ) {
             return;
@@ -414,6 +428,11 @@ public class GUI extends JFrame {
         setVentas();
     }
 
+    /***
+     * Actualiza un registro en la bd con la informacion ingresada
+     * @throws SQLException si hubo algun error con la bd
+     * @throws DataError SI hay un error de ingreso
+     */
     private void updateCliente() throws SQLException, DataError {
         if(nombre.getText().isEmpty() || apellidoPaterno.getText().isEmpty() || apellidoMaterno.getText().isEmpty() || telefono.getText().isEmpty() || correo.getText().isEmpty()) {
             return;
@@ -439,6 +458,11 @@ public class GUI extends JFrame {
         setClientes();
     }
 
+    /***
+     * Registra un cliente en la bd con la informacion ingresada
+     * @throws SQLException si hubo algun error con la bd
+     * @throws DataError SI hay un error de ingreso
+     */
     private void createCliente() throws SQLException, DataError {
         if(nombre.getText().isEmpty() || apellidoPaterno.getText().isEmpty() || apellidoMaterno.getText().isEmpty() || telefono.getText().isEmpty() || correo.getText().isEmpty()) {
             return;
@@ -464,6 +488,11 @@ public class GUI extends JFrame {
 
     }
 
+    /***
+     * Actualiza un registro en la bd con la informacion ingresada
+     * @throws SQLException si hubo algun error con la bd
+     * @throws DataError SI hay un error de ingreso
+     */
     private void updateAuto() throws SQLException, DataError {
         if(modelo.getText().isEmpty() || marca.getText().isEmpty() || ano.getText().isEmpty() || precio.getText().isEmpty()) {
             return;
@@ -488,6 +517,11 @@ public class GUI extends JFrame {
         setAutos();
     }
 
+    /***
+     * Registra un auto en la bd con la informacion ingresada
+     * @throws SQLException si hubo algun error con la bd
+     * @throws DataError SI hay un error de ingreso
+     */
     private void createAuto() throws SQLException, DataError {
         if(modelo.getText().isEmpty() || marca.getText().isEmpty() || ano.getText().isEmpty() || precio.getText().isEmpty()) {
             return;
@@ -511,6 +545,10 @@ public class GUI extends JFrame {
         setAutos();
     }
 
+    /***
+     * Trae los registros de la BD y los muestra en tabla
+     * @throws SQLException si hubo algun error con la bd
+     */
     private void setAutos() throws SQLException {
         connection = Conexion.getConnection();
         if(connection.getAutoCommit()){
@@ -535,6 +573,10 @@ public class GUI extends JFrame {
 
     }
 
+    /***
+     * Trae los registros de la BD y los muestra en tabla
+     * @throws SQLException si hubo algun error con la bd
+     */
     private void setClientes() throws SQLException {
         connection = Conexion.getConnection();
         if(connection.getAutoCommit()){
@@ -561,6 +603,10 @@ public class GUI extends JFrame {
 
     }
 
+    /***
+     * Trae los registros de la BD y los muestra en tabla
+     * @throws SQLException si hubo algun error con la bd
+     */
     private void setVentas() throws SQLException {
         connection = Conexion.getConnection();
         if(connection.getAutoCommit()){
@@ -583,6 +629,13 @@ public class GUI extends JFrame {
 
     }
 
+    /***
+     * Se encarga de revisar si los datos ingresados son correctos
+     * @param info Texto ingresado
+     * @param typeInt Bandera para saber si es el año del que se esta hablando
+     * @return True - si no hay error, False - si hay error
+     * @throws DataError SI hubo un error con la informacion ingresada
+     */
     private boolean isValid(String info, int typeInt) throws DataError {
         try {
             int numero = Integer.parseInt(info);

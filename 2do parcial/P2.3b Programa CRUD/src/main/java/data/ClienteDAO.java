@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/***
+ * Se encarga de realizar las transacciones CRUD para los objetos cliente
+ */
 public class ClienteDAO {
     private Connection conexionTransaccional;
     private static final String SQL_SELECT = "SELECT * FROM Cliente";
@@ -27,6 +30,11 @@ public class ClienteDAO {
         this.conexionTransaccional = conexionTransaccional;
     }
 
+    /***
+     * Se encarga de traer todos los registros de Clientes en la BD
+     * @return Lista de objetos clientes, derivada del select
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public List<Cliente> seleccionar() throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -62,6 +70,12 @@ public class ClienteDAO {
         return clientes;
     }
 
+    /***
+     * Se encarga de insertar un nuevo registro cliente a la bd
+     * @param cliente Objeto que contiene la infromacion del registro a insertar
+     * @return NUmero de rows afectadas
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public int insertar(Cliente cliente) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -88,6 +102,12 @@ public class ClienteDAO {
         return registros;
     }
 
+    /***
+     * Se encarga de actualizar un registro cliente existente en la bd
+     * @param cliente Objeto que contiene la infromacion del registro a modificar
+     * @return NUmero de rows afectadas
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public int actualizar(Cliente cliente) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -115,6 +135,12 @@ public class ClienteDAO {
         return registros;
     }
 
+    /***
+     * Se encarga de eliminar un registro cliente existente en la bd
+     * @param cliente Objeto que contiene la infromacion del registro a eliminar
+     * @return NUmero de rows afectadas
+     * @throws SQLException SI hubo un error al hacer la consulta
+     */
     public int eliminar(Cliente cliente) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
