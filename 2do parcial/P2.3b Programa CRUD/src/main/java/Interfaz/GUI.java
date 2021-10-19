@@ -6,6 +6,7 @@ import data.VentaDAO;
 import domain.Auto;
 import domain.Cliente;
 import domain.Venta;
+import error.DataError;
 import util.Conexion;
 
 import javax.swing.*;
@@ -112,28 +113,28 @@ public class GUI extends JFrame {
         agregarAuto.addActionListener((ActionEvent) -> {
             try {
                 createAuto();
-            } catch (SQLException throwables) {
+            } catch (SQLException | DataError throwables) {
                 throwables.printStackTrace();
             }
         });
         modificarAuto.addActionListener((ActionEvent) -> {
             try {
                 updateAuto();
-            } catch (SQLException throwables) {
+            } catch (SQLException | DataError throwables) {
                 throwables.printStackTrace();
             }
         });
         agregarCliente.addActionListener((ActionEvent) -> {
             try {
                 createCliente();
-            } catch (SQLException throwables) {
+            } catch (SQLException | DataError throwables) {
                 throwables.printStackTrace();
             }
         });
         modificarCliente.addActionListener((ActionEvent) -> {
             try {
                 updateCliente();
-            } catch (SQLException throwables) {
+            } catch (SQLException | DataError throwables) {
                 throwables.printStackTrace();
             }
         });
@@ -413,7 +414,7 @@ public class GUI extends JFrame {
         setVentas();
     }
 
-    private void updateCliente() throws SQLException {
+    private void updateCliente() throws SQLException, DataError {
         if(nombre.getText().isEmpty() || apellidoPaterno.getText().isEmpty() || apellidoMaterno.getText().isEmpty() || telefono.getText().isEmpty() || correo.getText().isEmpty()) {
             return;
         }
@@ -429,13 +430,16 @@ public class GUI extends JFrame {
         cliente.setApellidoMaterno(apellidoMaterno.getText());
         cliente.setTelefono(telefono.getText());
         cliente.setCorreo(correo.getText());
+        if(!isValid(telefono.getText(),2)){
+            return;
+        }
         clienteDAO.actualizar(cliente);
         connection.commit();
         tablaClienteModel.setRowCount(0);
         setClientes();
     }
 
-    private void createCliente() throws SQLException {
+    private void createCliente() throws SQLException, DataError {
         if(nombre.getText().isEmpty() || apellidoPaterno.getText().isEmpty() || apellidoMaterno.getText().isEmpty() || telefono.getText().isEmpty() || correo.getText().isEmpty()) {
             return;
         }
@@ -450,13 +454,17 @@ public class GUI extends JFrame {
         cliente.setApellidoMaterno(apellidoMaterno.getText());
         cliente.setTelefono(telefono.getText());
         cliente.setCorreo(correo.getText());
+        if(!isValid(telefono.getText(),2)){
+                return;
+        }
         clienteDAO.insertar(cliente);
         connection.commit();
         tablaClienteModel.setRowCount(0);
         setClientes();
+
     }
 
-    private void updateAuto() throws SQLException {
+    private void updateAuto() throws SQLException, DataError {
         if(modelo.getText().isEmpty() || marca.getText().isEmpty() || ano.getText().isEmpty() || precio.getText().isEmpty()) {
             return;
         }
@@ -470,6 +478,9 @@ public class GUI extends JFrame {
         auto.setModelo(modelo.getText());
         auto.setMarca(marca.getText());
         auto.setAno(ano.getText());
+        if(!isValid(ano.getText(),1)||!isValid(precio.getText(),0)){
+            return;
+        }
         auto.setPrecio(Double.parseDouble(precio.getText()));
         autoDAO.actualizar(auto);
         connection.commit();
@@ -477,7 +488,7 @@ public class GUI extends JFrame {
         setAutos();
     }
 
-    private void createAuto() throws SQLException {
+    private void createAuto() throws SQLException, DataError {
         if(modelo.getText().isEmpty() || marca.getText().isEmpty() || ano.getText().isEmpty() || precio.getText().isEmpty()) {
             return;
         }
@@ -490,6 +501,9 @@ public class GUI extends JFrame {
         auto.setModelo(modelo.getText());
         auto.setMarca(marca.getText());
         auto.setAno(ano.getText());
+        if(!isValid(ano.getText(),1)||!isValid(precio.getText(),0)){
+            return;
+        }
         auto.setPrecio(Double.parseDouble(precio.getText()));
         autoDAO.insertar(auto);
         connection.commit();
@@ -567,5 +581,24 @@ public class GUI extends JFrame {
             tablaVentaModel.addRow(datosVentas);
         }
 
+    }
+
+    private boolean isValid(String info, int typeInt) throws DataError {
+        try {
+            int numero = Integer.parseInt(info);
+            if((numero * -1) >= 0){
+                throw new DataError("Numero Negativo");
+            }
+        }catch (Exception e){
+            return false;
+        }
+
+        if(typeInt == 1){
+            if(info.length() != 4){
+                throw new DataError("Año incorrecto");
+            }
+        }
+
+        return true;
     }
 }
