@@ -11,6 +11,10 @@ public class Cliente {
     public Cliente() {
     }
 
+    public Cliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
+
     public Cliente(Integer idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correo) {
         this.idCliente = idCliente;
         this.nombre = nombre;

@@ -13,6 +13,10 @@ public class Auto {
     public Auto() {
     }
 
+    public Auto(Integer idAuto) {
+        this.idAuto = idAuto;
+    }
+
     public Auto(Integer idAuto, String modelo, String marca, LocalDate ano, Double precio) {
         this.idAuto = idAuto;
         this.modelo = modelo;
@@ -63,12 +67,6 @@ public class Auto {
 
     @Override
     public String toString() {
-        return "Auto{" +
-                "idAuto=" + idAuto +
-                ", modelo='" + modelo + '\'' +
-                ", marca='" + marca + '\'' +
-                ", ano=" + ano +
-                ", precio=" + precio +
-                '}';
+        return (modelo + " " + marca);
     }
 }

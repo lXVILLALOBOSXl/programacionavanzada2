@@ -15,8 +15,8 @@ import java.util.List;
 public class AutoDAO {
     private Connection conexionTransaccional;
     private static final String SQL_SELECT = "SELECT * FROM Auto";
-    private static final String SQL_INSERT = "INSERT INTO Auto (modelo, marca, ano) VALUES (?, ?, ?)";
-    private static final String SQL_UPDATE = "UPDATE Auto SET modelo = ?, marca = ?, ano = ? where idAuto = ?";
+    private static final String SQL_INSERT = "INSERT INTO Auto (modelo, marca, ano, precio) VALUES (?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE Auto SET modelo = ?, marca = ?, ano = ?, precio = ? where idAuto = ?";
     private static final String SQL_DELETE = "DELETE FROM Auto WHERE idAuto = ?";
 
     public AutoDAO(){
@@ -71,6 +71,7 @@ public class AutoDAO {
             preparedStatement.setString(1,auto.getModelo());
             preparedStatement.setString(2,auto.getMarca());
             preparedStatement.setString(3,auto.getAno().toString());
+            preparedStatement.setString(4,auto.getPrecio().toString());
             registros = preparedStatement.executeUpdate();
         } finally {
             try {
@@ -95,7 +96,8 @@ public class AutoDAO {
             preparedStatement.setString(1,auto.getModelo());
             preparedStatement.setString(2,auto.getMarca());
             preparedStatement.setString(3,auto.getAno().toString());
-            preparedStatement.setString(4,auto.getIdAuto().toString());
+            preparedStatement.setString(4,auto.getPrecio().toString());
+            preparedStatement.setString(5,auto.getIdAuto().toString());
             registros = preparedStatement.executeUpdate();
         } finally {
             try {

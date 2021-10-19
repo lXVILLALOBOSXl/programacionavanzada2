@@ -19,6 +19,7 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class GUI extends JFrame {
@@ -36,6 +37,7 @@ public class GUI extends JFrame {
     private DefaultTableModel tablaAutoModel = new DefaultTableModel();
     private DefaultTableModel tablaClienteModel = new DefaultTableModel();
     private DefaultTableModel tablaVentaModel = new DefaultTableModel();
+    private Integer ventaSeleccionada, autoSeleccionado, clienteSeleccionado;
 
 
     /**
@@ -94,6 +96,8 @@ public class GUI extends JFrame {
         apellidoMaterno = new JTextField();
         telefono = new JTextField();
         correo = new JTextField();
+        comboBoxClientes = new JComboBox();
+        comboBoxAutos = new JComboBox();
 
         setTables();
 
@@ -105,22 +109,59 @@ public class GUI extends JFrame {
         groupLayout.setAutoCreateGaps(true);
 
         //Se agregan los evenetos a los componentes del programa
-        agregarAuto.addActionListener((ActionEvent) -> {createAuto();});
-        modificarAuto.addActionListener((ActionEvent) -> {updateAuto();});
-        agregarCliente.addActionListener((ActionEvent) -> {createCliente();});
-        modificarCliente.addActionListener((ActionEvent) -> {updateCliente();});
-        agregarVenta.addActionListener((ActionEvent) -> {createVenta();});
-        eliminarVenta.addActionListener((ActionEvent) -> {deleteVenta();});
+        agregarAuto.addActionListener((ActionEvent) -> {
+            try {
+                createAuto();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+        modificarAuto.addActionListener((ActionEvent) -> {
+            try {
+                updateAuto();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+        agregarCliente.addActionListener((ActionEvent) -> {
+            try {
+                createCliente();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+        modificarCliente.addActionListener((ActionEvent) -> {
+            try {
+                updateCliente();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+        agregarVenta.addActionListener((ActionEvent) -> {
+            try {
+                createVenta();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+        eliminarVenta.addActionListener((ActionEvent) -> {
+            try {
+                deleteVenta();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         tablaAuto.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 if (tablaAuto.getSelectedRow() > -1) {
                     // print first column value from selected row
-                    modelo.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 0).toString());
-                    marca.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 1).toString());
-                    ano.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 2).toString());
-                    precio.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 3).toString());
+                    autoSeleccionado = Integer.parseInt(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 0).toString());
+                    modelo.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 1).toString());
+                    marca.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 2).toString());
+                    ano.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 3).toString());
+                    precio.setText(tablaAuto.getValueAt(tablaAuto.getSelectedRow(), 4).toString());
                 }
             }
         });
@@ -130,11 +171,12 @@ public class GUI extends JFrame {
             public void valueChanged(ListSelectionEvent event) {
                 if (tablaCliente.getSelectedRow() > -1) {
                     // print first column value from selected row
-                    nombre.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 0).toString());
-                    apellidoPaterno.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 1).toString());
-                    apellidoMaterno.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 2).toString());
-                    telefono.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 3).toString());
-                    correo.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 4).toString());
+                    clienteSeleccionado = Integer.parseInt(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 0).toString());
+                    nombre.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 1).toString());
+                    apellidoPaterno.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 2).toString());
+                    apellidoMaterno.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 3).toString());
+                    telefono.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 4).toString());
+                    correo.setText(tablaCliente.getValueAt(tablaCliente.getSelectedRow(), 5).toString());
                 }
             }
         });
@@ -144,6 +186,7 @@ public class GUI extends JFrame {
             public void valueChanged(ListSelectionEvent event) {
                 if (tablaVenta.getSelectedRow() > -1) {
                     // print first column value from selected row
+                    ventaSeleccionada = Integer.parseInt(tablaVenta.getValueAt(tablaVenta.getSelectedRow(), 0).toString());
                 }
             }
         });
@@ -289,6 +332,7 @@ public class GUI extends JFrame {
     }
 
     private void setTables() {
+        tablaAutoModel.addColumn("id");
         tablaAutoModel.addColumn("Modelo");
         tablaAutoModel.addColumn("Marca");
         tablaAutoModel.addColumn("Año");
@@ -302,6 +346,7 @@ public class GUI extends JFrame {
 
         tablaAuto.setModel(tablaAutoModel);
 
+        tablaClienteModel.addColumn("id");
         tablaClienteModel.addColumn("nombre");
         tablaClienteModel.addColumn("apellidoPaterno");
         tablaClienteModel.addColumn("apellidoMaterno");
@@ -316,6 +361,7 @@ public class GUI extends JFrame {
 
         tablaCliente.setModel(tablaClienteModel);
 
+        tablaVentaModel.addColumn("id");
         tablaVentaModel.addColumn("modelo");
         tablaVentaModel.addColumn("marca");
         tablaVentaModel.addColumn("ano");
@@ -333,22 +379,122 @@ public class GUI extends JFrame {
 
     }
 
-    private void deleteVenta() {
+    private void deleteVenta() throws SQLException {
+        if(ventaSeleccionada == null){
+            return;
+        }
+        connection = Conexion.getConnection();
+        if (connection.getAutoCommit()) {
+            connection.setAutoCommit(false);
+        }
+        VentaDAO ventaDAO = new VentaDAO(connection);
+        Venta venta = new Venta(ventaSeleccionada);
+        ventaDAO.eliminar(venta);
+        connection.commit();
+        tablaVentaModel.setRowCount(0);
+        setVentas();
     }
 
-    private void createVenta() {
+    private void createVenta() throws SQLException {
+        if(comboBoxAutos.getSelectedItem().equals(null) || comboBoxClientes.getSelectedItem().equals(null) ) {
+            return;
+        }
+        connection = Conexion.getConnection();
+        if (connection.getAutoCommit()) {
+            connection.setAutoCommit(false);
+        }
+        VentaDAO ventaDAO = new VentaDAO(connection);
+        Venta venta = new Venta();
+        venta.setAuto(new Auto(comboBoxAutos.getSelectedIndex()+1));
+        venta.setCliente(new Cliente(comboBoxClientes.getSelectedIndex()+1));
+        ventaDAO.insertar(venta);
+        connection.commit();
+        tablaVentaModel.setRowCount(0);
+        setVentas();
     }
 
-    private void updateCliente() {
+    private void updateCliente() throws SQLException {
+        if(nombre.getText().isEmpty() || apellidoPaterno.getText().isEmpty() || apellidoMaterno.getText().isEmpty() || telefono.getText().isEmpty() || correo.getText().isEmpty()) {
+            return;
+        }
+        connection = Conexion.getConnection();
+        if (connection.getAutoCommit()) {
+            connection.setAutoCommit(false);
+        }
+        ClienteDAO clienteDAO = new ClienteDAO(connection);
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(clienteSeleccionado);
+        cliente.setNombre(nombre.getText());
+        cliente.setApellidoPaterno(apellidoPaterno.getText());
+        cliente.setApellidoMaterno(apellidoMaterno.getText());
+        cliente.setTelefono(telefono.getText());
+        cliente.setCorreo(correo.getText());
+        clienteDAO.actualizar(cliente);
+        connection.commit();
+        tablaClienteModel.setRowCount(0);
+        setClientes();
     }
 
-    private void createCliente() {
+    private void createCliente() throws SQLException {
+        if(nombre.getText().isEmpty() || apellidoPaterno.getText().isEmpty() || apellidoMaterno.getText().isEmpty() || telefono.getText().isEmpty() || correo.getText().isEmpty()) {
+            return;
+        }
+        connection = Conexion.getConnection();
+        if (connection.getAutoCommit()) {
+            connection.setAutoCommit(false);
+        }
+        ClienteDAO clienteDAO = new ClienteDAO(connection);
+        Cliente cliente = new Cliente();
+        cliente.setNombre(nombre.getText());
+        cliente.setApellidoPaterno(apellidoPaterno.getText());
+        cliente.setApellidoMaterno(apellidoMaterno.getText());
+        cliente.setTelefono(telefono.getText());
+        cliente.setCorreo(correo.getText());
+        clienteDAO.insertar(cliente);
+        connection.commit();
+        tablaClienteModel.setRowCount(0);
+        setClientes();
     }
 
-    private void updateAuto() {
+    private void updateAuto() throws SQLException {
+        if(modelo.getText().isEmpty() || marca.getText().isEmpty() || ano.getText().isEmpty() || precio.getText().isEmpty()) {
+            return;
+        }
+        connection = Conexion.getConnection();
+        if (connection.getAutoCommit()) {
+            connection.setAutoCommit(false);
+        }
+        AutoDAO autoDAO = new AutoDAO(connection);
+        Auto auto = new Auto();
+        auto.setIdAuto(autoSeleccionado);
+        auto.setModelo(modelo.getText());
+        auto.setMarca(marca.getText());
+        auto.setAno(LocalDate.parse(ano.getText()));
+        auto.setPrecio(Double.parseDouble(precio.getText()));
+        autoDAO.actualizar(auto);
+        connection.commit();
+        tablaAutoModel.setRowCount(0);
+        setAutos();
     }
 
-    private void createAuto() {
+    private void createAuto() throws SQLException {
+        if(modelo.getText().isEmpty() || marca.getText().isEmpty() || ano.getText().isEmpty() || precio.getText().isEmpty()) {
+            return;
+        }
+        connection = Conexion.getConnection();
+        if (connection.getAutoCommit()) {
+            connection.setAutoCommit(false);
+        }
+        AutoDAO autoDAO = new AutoDAO(connection);
+        Auto auto = new Auto();
+        auto.setModelo(modelo.getText());
+        auto.setMarca(marca.getText());
+        auto.setAno(LocalDate.parse(ano.getText()));
+        auto.setPrecio(Double.parseDouble(precio.getText()));
+        autoDAO.insertar(auto);
+        connection.commit();
+        tablaAutoModel.setRowCount(0);
+        setAutos();
     }
 
     private void setAutos() throws SQLException {
@@ -358,14 +504,18 @@ public class GUI extends JFrame {
         }
         AutoDAO autoDAO = new AutoDAO(connection);
         List<Auto> autos = autoDAO.seleccionar();
-        comboBoxAutos = new JComboBox(autos.toArray());
-        String [] datosAutos = new String[4];
+        comboBoxAutos.removeAllItems();
+        for (Object o : autos) {
+            comboBoxAutos.addItem(o);
+        }
+        String [] datosAutos = new String[5];
 
         for (Auto auto: autos) {
-            datosAutos[0] = auto.getModelo();
-            datosAutos[1] = auto.getMarca();
-            datosAutos[2] = auto.getAno().toString();
-            datosAutos[3] = auto.getPrecio().toString();
+            datosAutos[0] = auto.getIdAuto().toString();
+            datosAutos[1] = auto.getModelo();
+            datosAutos[2] = auto.getMarca();
+            datosAutos[3] = auto.getAno().toString();
+            datosAutos[4] = auto.getPrecio().toString();
             tablaAutoModel.addRow(datosAutos);
         }
 
@@ -378,16 +528,20 @@ public class GUI extends JFrame {
         }
         ClienteDAO clienteDAO = new ClienteDAO(connection);
         List<Cliente> clientes = clienteDAO.seleccionar();
-        comboBoxClientes = new JComboBox(clientes.toArray());
+        comboBoxClientes.removeAllItems();
+        for (Object o : clientes) {
+            comboBoxClientes.addItem(o);
+        }
 
-        String [] datosClientes = new String[5];
+        String [] datosClientes = new String[6];
 
         for (Cliente cliente: clientes) {
-            datosClientes[0] = cliente.getNombre();
-            datosClientes[1] = cliente.getApellidoPaterno();
-            datosClientes[2] = cliente.getApellidoMaterno();
-            datosClientes[3] = cliente.getTelefono();
-            datosClientes[4] = cliente.getCorreo();
+            datosClientes[0] = cliente.getIdCliente().toString();
+            datosClientes[1] = cliente.getNombre();
+            datosClientes[2] = cliente.getApellidoPaterno();
+            datosClientes[3] = cliente.getApellidoMaterno();
+            datosClientes[4] = cliente.getTelefono();
+            datosClientes[5] = cliente.getCorreo();
             tablaClienteModel.addRow(datosClientes);
         }
 
@@ -401,14 +555,15 @@ public class GUI extends JFrame {
         VentaDAO ventaDAO = new VentaDAO(connection);
         List<Venta> ventas = ventaDAO.seleccionar();
 
-        String [] datosVentas = new String[5];
+        String [] datosVentas = new String[6];
 
         for (Venta venta: ventas) {
-            datosVentas[0] = venta.getAuto().getModelo();
-            datosVentas[1] = venta.getAuto().getMarca();
-            datosVentas[2] = venta.getAuto().getAno().toString();
-            datosVentas[3] = venta.getAuto().getPrecio().toString();
-            datosVentas[4] = venta.getCliente().getNombre();
+            datosVentas[0] = venta.getIdVenta().toString();
+            datosVentas[1] = venta.getAuto().getModelo();
+            datosVentas[2] = venta.getAuto().getMarca();
+            datosVentas[3] = venta.getAuto().getAno().toString();
+            datosVentas[4] = venta.getAuto().getPrecio().toString();
+            datosVentas[5] = venta.getCliente().getNombre();
             tablaVentaModel.addRow(datosVentas);
         }
 

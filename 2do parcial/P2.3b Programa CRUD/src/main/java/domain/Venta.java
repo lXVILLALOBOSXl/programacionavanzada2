@@ -14,6 +14,10 @@ public class Venta {
         this.cliente = cliente;
     }
 
+    public Venta(Integer ventaSeleccionada) {
+        this.idVenta = ventaSeleccionada;
+    }
+
     public Integer getIdVenta() {
         return idVenta;
     }
