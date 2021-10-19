@@ -41,8 +41,8 @@ public class ClienteDAO {
             while (resultSet.next()){
                 int idCliente = resultSet.getInt("idCliente");
                 String nombre = resultSet.getString("nombre");
-                String apellidoPaterno = resultSet.getString("apelllidoPaterno");
-                String apellidoMaterno = resultSet.getString("apelllidoMaterno");
+                String apellidoPaterno = resultSet.getString("apellidoPaterno");
+                String apellidoMaterno = resultSet.getString("apellidoMaterno");
                 String telefono = resultSet.getString("telefono");
                 String correo = resultSet.getString("correo");
                 cliente = new Cliente(idCliente,nombre,apellidoPaterno,apellidoMaterno,telefono,correo);

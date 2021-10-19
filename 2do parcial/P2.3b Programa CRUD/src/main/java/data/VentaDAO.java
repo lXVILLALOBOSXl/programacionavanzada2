@@ -44,7 +44,7 @@ public class VentaDAO {
             while (resultSet.next()){
                 auto = new Auto();
                 cliente = new Cliente();
-                auto.setAno(resultSet.getDate("ano"));
+                auto.setAno(resultSet.getDate("ano").toLocalDate());
                 auto.setMarca(resultSet.getString("marca"));
                 auto.setPrecio(resultSet.getDouble("precio"));
                 auto.setModelo(resultSet.getString("modelo"));

@@ -1,7 +1,10 @@
 package test;
 
+import Interfaz.GUI;
+
 public class Prueba {
     public static void main(String[] args) {
-        System.out.println("holas");
+        GUI vista = new GUI();
+        vista.setVisible(true);
     }
 }

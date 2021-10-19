@@ -1,18 +1,19 @@
 package domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Auto {
     private Integer idAuto;
     private String modelo;
     private String marca;
-    private Date ano;
+    private LocalDate ano;
     private Double precio;
 
     public Auto() {
     }
 
-    public Auto(Integer idAuto, String modelo, String marca, Date ano, Double precio) {
+    public Auto(Integer idAuto, String modelo, String marca, LocalDate ano, Double precio) {
         this.idAuto = idAuto;
         this.modelo = modelo;
         this.marca = marca;
@@ -44,11 +45,11 @@ public class Auto {
         this.marca = marca;
     }
 
-    public Date getAno() {
+    public LocalDate getAno() {
         return ano;
     }
 
-    public void setAno(Date ano) {
+    public void setAno(LocalDate ano) {
         this.ano = ano;
     }
 
