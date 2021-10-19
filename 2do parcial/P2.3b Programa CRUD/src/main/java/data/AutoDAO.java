@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +43,7 @@ public class AutoDAO {
                 int idAuto = resultSet.getInt("idAuto");
                 String modelo = resultSet.getString("modelo");
                 String marca = resultSet.getString("marca");
-                LocalDate ano = resultSet.getDate("ano").toLocalDate();
+                String ano = resultSet.getString("ano");
                 Double precio = resultSet.getDouble("precio");
                 auto = new Auto(idAuto,modelo,marca,ano,precio);
                 autos.add(auto);

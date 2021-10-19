@@ -469,7 +469,7 @@ public class GUI extends JFrame {
         auto.setIdAuto(autoSeleccionado);
         auto.setModelo(modelo.getText());
         auto.setMarca(marca.getText());
-        auto.setAno(LocalDate.parse(ano.getText()));
+        auto.setAno(ano.getText());
         auto.setPrecio(Double.parseDouble(precio.getText()));
         autoDAO.actualizar(auto);
         connection.commit();
@@ -489,7 +489,7 @@ public class GUI extends JFrame {
         Auto auto = new Auto();
         auto.setModelo(modelo.getText());
         auto.setMarca(marca.getText());
-        auto.setAno(LocalDate.parse(ano.getText()));
+        auto.setAno(ano.getText());
         auto.setPrecio(Double.parseDouble(precio.getText()));
         autoDAO.insertar(auto);
         connection.commit();
@@ -514,7 +514,7 @@ public class GUI extends JFrame {
             datosAutos[0] = auto.getIdAuto().toString();
             datosAutos[1] = auto.getModelo();
             datosAutos[2] = auto.getMarca();
-            datosAutos[3] = auto.getAno().toString();
+            datosAutos[3] = auto.getAno();
             datosAutos[4] = auto.getPrecio().toString();
             tablaAutoModel.addRow(datosAutos);
         }
